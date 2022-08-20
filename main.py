@@ -92,7 +92,7 @@ def  fix_first():
             if array[i][j]==tile_count:
                 array[i][j] = 1
 
-
+# main
 if __name__ == '__main__':
     tile_count = 1
     size = int(input())
