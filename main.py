@@ -1,3 +1,4 @@
+# Print function used to visualise the input and output:
 def print_array(array):
     for i in range(len(array)):
         for j in range(len(array)):
@@ -6,7 +7,8 @@ def print_array(array):
 
     print()
 
-def gen_input(size, index):
+# Helper function used to create the input based in the size of n and the index of the fan
+def generate_input(size, index):
     array = []
     for i in range(size):
         r = []
@@ -32,6 +34,7 @@ def place_tile(x1,y1,x2,y2,x3,y3):
     array[x2][y2] = tile_count
     array[x3][y3] = tile_count
 
+# Recursively places L-shaped tiles until the ceiling is covered
 def tile(n, row_offset, col_offset):
     global tile_count
     row_of_fan = -1
@@ -61,16 +64,19 @@ def tile(n, row_offset, col_offset):
     if (row_of_fan < row_offset + n/2 and col_of_fan < col_offset + n/2):
         place_tile(upper_row, right_col, lower_row, left_col, lower_row, right_col)
 
+    #q1
     elif (row_of_fan < row_offset + n/2 and col_of_fan >= col_offset + n/2):
         place_tile(upper_row, left_col, lower_row, left_col, lower_row, right_col)
 
+    #q2
     elif (row_of_fan >= row_offset + n/2 and col_of_fan < col_offset + n/2):
         place_tile(upper_row, left_col, upper_row, right_col, lower_row, right_col)
 
+    #q3
     else:
         place_tile(upper_row, left_col, upper_row, right_col, lower_row, left_col)
 
-    #Recursive calls to tile each quadrant:
+    #Recursive calls tile on each quadrant:
     tile(int(n/2), row_offset, col_offset)
     tile(int(n/2), row_offset, col_offset + int(n/2))
     tile(int(n/2), row_offset + int(n/2), col_offset)
@@ -78,6 +84,8 @@ def tile(n, row_offset, col_offset):
 
     return
 
+# Since we check for 1s in the tile function, we skip tile 1 and go straight to tile 2
+# Therefore, we replace the highest numbered tile with 1 at the end.
 def  fix_first():
     for i in range(len(array)):
         for j in range(len(array)):
@@ -87,12 +95,14 @@ def  fix_first():
 
 if __name__ == '__main__':
     tile_count = 1
-    for i in range(64):
-        array =  gen_input(8, i)
-        tile_count = 1
-        tile(len(array), 0, 0)
-        fix_first()
-        print_array(array)
+    size = int(input())
+    index = int(input())
+    array =  generate_input(size, index)
+    tile_count = 1
+    tile(len(array), 0, 0)
+    fix_first()
+    print("Output:")
+    print_array(array)
 
 
 
