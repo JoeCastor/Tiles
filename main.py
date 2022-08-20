@@ -27,7 +27,7 @@ def generate_input(size, index):
 
 
 # Places an L-Shaped tile at the 3 coordinates given
-def place_tile(x1,y1,x2,y2,x3,y3):
+def place_l(x1, y1, x2, y2, x3, y3):
     global tile_count
     tile_count+=1
     array[x1][y1] = tile_count
@@ -35,7 +35,7 @@ def place_tile(x1,y1,x2,y2,x3,y3):
     array[x3][y3] = tile_count
 
 # Recursively places L-shaped tiles until the ceiling is covered
-def tile(n, row_offset, col_offset):
+def tile_recurse(n, row_offset, col_offset):
     global tile_count
     row_of_fan = -1
     col_of_fan = -1
@@ -62,25 +62,25 @@ def tile(n, row_offset, col_offset):
     left_col = col_offset + int(n/2) - 1
     # q0
     if (row_of_fan < row_offset + n/2 and col_of_fan < col_offset + n/2):
-        place_tile(upper_row, right_col, lower_row, left_col, lower_row, right_col)
+        place_l(upper_row, right_col, lower_row, left_col, lower_row, right_col)
 
     #q1
     elif (row_of_fan < row_offset + n/2 and col_of_fan >= col_offset + n/2):
-        place_tile(upper_row, left_col, lower_row, left_col, lower_row, right_col)
+        place_l(upper_row, left_col, lower_row, left_col, lower_row, right_col)
 
     #q2
     elif (row_of_fan >= row_offset + n/2 and col_of_fan < col_offset + n/2):
-        place_tile(upper_row, left_col, upper_row, right_col, lower_row, right_col)
+        place_l(upper_row, left_col, upper_row, right_col, lower_row, right_col)
 
     #q3
     else:
-        place_tile(upper_row, left_col, upper_row, right_col, lower_row, left_col)
+        place_l(upper_row, left_col, upper_row, right_col, lower_row, left_col)
 
     #Recursive calls tile on each quadrant:
-    tile(int(n/2), row_offset, col_offset)
-    tile(int(n/2), row_offset, col_offset + int(n/2))
-    tile(int(n/2), row_offset + int(n/2), col_offset)
-    tile(int(n/2), row_offset + int(n/2), col_offset + int(n/2))
+    tile_recurse(int(n / 2), row_offset, col_offset)
+    tile_recurse(int(n / 2), row_offset, col_offset + int(n / 2))
+    tile_recurse(int(n / 2), row_offset + int(n / 2), col_offset)
+    tile_recurse(int(n / 2), row_offset + int(n / 2), col_offset + int(n / 2))
 
     return
 
@@ -94,12 +94,12 @@ def  fix_first():
 
 # main
 if __name__ == '__main__':
-    tile_count = 1
     size = int(input())
     index = int(input())
-    array =  generate_input(size, index)
+    array = generate_input(size, index)
+
     tile_count = 1
-    tile(len(array), 0, 0)
+    tile_recurse(len(array), 0, 0)
     fix_first()
     print("Output:")
     print_array(array)
